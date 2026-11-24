@@ -1,0 +1,8 @@
+.venv/
+.cache/
+Temp/
+logs/
+tests/logs/
+__pycache__/
+*.pyc
+.claude/

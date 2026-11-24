@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Kanji Study – JLPT N5 to N2 kanji</title>
+  <meta name="description" content="Learn and review JLPT N5 to N2 kanji: readings in hiragana, common words, parts and memory stories, quizzes and spaced-repetition reviews.">
+  <meta name="theme-color" content="#1e5a43">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Klee+One:wght@400;600&display=swap">
+  <link rel="stylesheet" href="css/style.css">
+  <script type="module" src="js/app.js"></script>
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+  <header class="topbar">
+    <a class="brand" href="#/" aria-label="Kanji Study home"><span class="brand-mark" lang="ja" aria-hidden="true">字</span><span class="brand-name">Kanji Study</span></a>
+    <nav class="topnav" aria-label="Main">
+      <a href="#/" data-nav="home">Home</a>
+      <a href="#/quick" data-nav="quick">Quick review</a>
+      <a href="#/review" data-nav="review">Reviews <span class="badge" data-due-count hidden></span></a>
+      <a href="#/quiz" data-nav="quiz">Quiz</a>
+      <a href="#/family" data-nav="family">Family map</a>
+      <a href="#/stats" data-nav="stats">Progress</a>
+    </nav>
+    <form class="search" role="search" data-search>
+      <input type="search" name="q" placeholder="Search 休, rest or やすむ" aria-label="Search kanji by character, meaning or reading" autocomplete="off">
+    </form>
+    <a class="account-link" href="#/account" data-nav="account" data-account aria-label="Sign in"><span class="avatar" lang="ja" aria-hidden="true">人</span><span class="account-text">Sign in</span></a>
+    <a class="settings-link" href="#/settings" data-nav="settings" aria-label="Settings"><span lang="ja" aria-hidden="true">設</span><span class="settings-text">Settings</span></a>
+  </header>
+
+  <main id="main" class="page" tabindex="-1">
+    <p class="loading">Loading kanji…</p>
+  </main>
+
+  <nav class="tabbar" aria-label="Main">
+    <a href="#/" data-nav="home"><span lang="ja" aria-hidden="true">始</span>Home</a>
+    <a href="#/quick" data-nav="quick"><span lang="ja" aria-hidden="true">見</span>Quick</a>
+    <a href="#/review" data-nav="review"><span lang="ja" aria-hidden="true">復</span>Reviews<span class="badge" data-due-count hidden></span></a>
+    <a href="#/quiz" data-nav="quiz"><span lang="ja" aria-hidden="true">問</span>Quiz</a>
+    <a href="#/family" data-nav="family"><span lang="ja" aria-hidden="true">系</span>Family</a>
+    <a href="#/stats" data-nav="stats"><span lang="ja" aria-hidden="true">進</span>Progress</a>
+  </nav>
+  <noscript><p class="empty">Kanji Study needs JavaScript to run.</p></noscript>
+</body>
+</html>

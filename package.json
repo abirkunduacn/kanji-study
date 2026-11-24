@@ -1,0 +1,9 @@
+{
+  "name": "kanji-study",
+  "private": true,
+  "type": "module",
+  "description": "Static JLPT N5-N2 kanji study site. No dependencies.",
+  "scripts": {
+    "test": "node tests/js/run.mjs"
+  }
+}
