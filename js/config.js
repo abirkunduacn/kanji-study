@@ -1,5 +1,5 @@
 export const APP_NAME = 'Kanji Study';
-export const APP_VERSION = '2026.11.24-1';
+export const APP_VERSION = '2026.11.24-2';
 export const DATA_URL = 'data/kanji.json';
 export const SERVICE_WORKER_URL = 'sw.js';
 export const LEVELS = ['N5', 'N4', 'N3', 'N2'];
