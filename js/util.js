@@ -79,6 +79,11 @@ export function shuffle(list, rng = Math.random) {
   return copy;
 }
 
+/** Change the address without adding a history entry or re-rendering the page. */
+export function replaceHash(hash) {
+  if (window.location.hash !== hash) window.history.replaceState(window.history.state, '', hash);
+}
+
 export function parseHash(hash) {
   const [raw, anchor = ''] = (hash || '').replace(/^#/, '').split('#');
   const [path, queryString = ''] = (raw || '/').split('?');

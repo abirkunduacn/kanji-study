@@ -3,9 +3,27 @@ import { meaningQuestion, readingQuestion } from '../quiz.js';
 import { kanjiSheet, masu } from '../render.js';
 import { resultsHtml, runQuestions } from '../session.js';
 import { startCard } from '../srs.js';
-import { durationLabel, esc, plural, shuffle } from '../util.js';
+import { durationLabel, esc, log, plural, replaceHash, shuffle } from '../util.js';
 
-export function render(ctx, [level, number]) {
+// Finished lessons' results by lesson address, so they come back after opening a missed kanji.
+const results = new Map();
+
+/** Address of a lesson; `step` is a card index, 'done' for the results, or null for the intro. */
+export function lessonHash(level, number, step = null) {
+  const base = `#/learn/${level}/${number}`;
+  if (step === null) return base;
+  return `${base}?step=${step === 'done' ? 'done' : step + 1}`;
+}
+
+/** The step saved in a lesson address: a card index, 'done', or null when there is none or it is out of range. */
+export function stepFromQuery(query, count) {
+  const value = query?.get('step');
+  if (value === 'done') return 'done';
+  const number = Number(value);
+  return Number.isInteger(number) && number >= 1 && number <= count ? number - 1 : null;
+}
+
+export function render(ctx, [level, number], query) {
   const { data, store, root } = ctx;
   const lessonNumber = Number(number);
   const chars = data.byLevel[level]?.lessons[lessonNumber - 1];
@@ -15,6 +33,7 @@ export function render(ctx, [level, number]) {
   }
   const title = `${level} lesson ${lessonNumber}`;
   const hasNext = lessonNumber < data.byLevel[level].lessons.length;
+  const address = lessonHash(level, lessonNumber);
   let cleanup = null;
   let step = 0;
 
@@ -29,6 +48,7 @@ export function render(ctx, [level, number]) {
 
   function intro() {
     const fresh = chars.filter((char) => !store.card(char)).length;
+    replaceHash(address);
     root.innerHTML = `
       <section class="lesson-intro">
         <p class="crumbs"><a href="#/level/${level}">${level}</a></p>
@@ -44,6 +64,7 @@ export function render(ctx, [level, number]) {
 
   function card() {
     const char = chars[step];
+    replaceHash(lessonHash(level, lessonNumber, step));
     root.innerHTML = `
       <section class="lesson-card">
         <div class="session-top">
@@ -74,7 +95,13 @@ export function render(ctx, [level, number]) {
   }
 
   function done(summary) {
-    const added = addToReviews(1);
+    results.set(address, { summary, added: addToReviews(1) });
+    replaceHash(lessonHash(level, lessonNumber, 'done'));
+    showResults();
+  }
+
+  function showResults() {
+    const { summary, added } = results.get(address);
     root.innerHTML = `
       ${resultsHtml(summary, data, `${title} done`)}
       <p>${added ? `Added ${plural(added, 'kanji', 'kanji')} to your reviews. The first review is in ${durationLabel(SRS_INTERVALS_HOURS[1])}.` : 'These kanji were already in your reviews, so their schedule did not change.'}</p>
@@ -120,7 +147,14 @@ export function render(ctx, [level, number]) {
   root.addEventListener('touchstart', onTouchStart, { passive: true });
   root.addEventListener('touchend', onTouchEnd);
   document.addEventListener('keydown', onKey);
-  intro();
+  const resume = stepFromQuery(query, chars.length);
+  const canResume = Number.isInteger(resume) || (resume === 'done' && results.has(address));
+  if (!canResume) intro();
+  else {
+    log('lesson.resume', { lesson: title, step: resume });
+    if (resume === 'done') showResults();
+    else { step = resume; card(); }
+  }
   return () => {
     cleanup?.();
     root.removeEventListener('click', onClick);

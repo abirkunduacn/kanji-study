@@ -22,6 +22,7 @@ const SHELL = [
   'js/data.js',
   'js/quiz.js',
   'js/render.js',
+  'js/scroll-memory.js',
   'js/session.js',
   'js/srs.js',
   'js/store.js',

@@ -1,6 +1,7 @@
 import { ACTIVE_USER_KEY, APP_NAME, APP_VERSION, SERVICE_WORKER_URL, STORAGE_KEY } from './config.js';
 import { createAccount } from './account.js';
 import { loadData } from './data.js';
+import { createScrollMemory } from './scroll-memory.js';
 import { dueChars } from './srs.js';
 import { createStore, defaultStorage, userKey } from './store.js';
 import { esc, log, parseHash } from './util.js';
@@ -91,8 +92,11 @@ async function boot() {
   });
   const ctx = { data, store, account, root, now: () => Date.now(), refreshBadge };
   let cleanup = null;
+  if ('scrollRestoration' in window.history) window.history.scrollRestoration = 'manual';
+  const scrollMemory = createScrollMemory({ history: window.history, getScroll: () => window.scrollY });
 
   function route() {
+    const returnTo = scrollMemory.enter();
     cleanup?.();
     cleanup = null;
     const { path, query, anchor } = parseHash(window.location.hash);
@@ -115,6 +119,10 @@ async function boot() {
     document.title = heading && match?.route.view !== home ? `${heading} – ${APP_NAME}` : `${APP_NAME} – JLPT N5 to N2 kanji`;
     refreshBadge();
     log('route', path);
+    if (returnTo !== null) {
+      window.scrollTo(0, returnTo);
+      log('route.scroll', returnTo);
+    }
   }
 
   document.querySelector('[data-search]')?.addEventListener('submit', (event) => {

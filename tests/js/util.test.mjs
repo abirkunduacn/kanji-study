@@ -66,6 +66,13 @@ describe('Rendering', () => {
     assert.ok(!kanjiSheet('休', data).includes('sound hint'));
   });
 
+  test('RND006 the stroke count reads "1 stroke" for one and "4 strokes" otherwise', () => {
+    assert.ok(kanjiSheet('休', data).includes('<span>4 strokes</span>'));
+    const one = fixtureData();
+    one.kanji['一'] = { ...one.kanji['休'], strokes: 1 };
+    assert.ok(kanjiSheet('一', one).includes('<span>1 stroke</span>'));
+  });
+
   test('RND004 readings without common words are listed as less common, for on and kun alike', () => {
     const people = kanjiSheet('人', data);
     assert.ok(people.includes('Less common: <span lang="ja">にん</span>'));

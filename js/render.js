@@ -1,7 +1,7 @@
 import { LEVELS } from './config.js';
 import { kunText } from './data.js';
 import { stageGroup } from './srs.js';
-import { esc } from './util.js';
+import { esc, plural } from './util.js';
 
 export function masu(char, size = 'l', extra = '') {
   return `<span class="masu masu--${size} ${extra}" lang="ja">${esc(char)}</span>`;
@@ -98,7 +98,7 @@ export function radicalLine(kanji) {
 }
 
 export function metaLine(kanji) {
-  return `<div class="meta">${levelBadge(kanji.level)}<a href="#/level/${kanji.level}#lesson-${kanji.lesson}">Lesson ${kanji.lesson}</a><span>${kanji.strokes} strokes</span>${radicalLine(kanji)}</div>`;
+  return `<div class="meta">${levelBadge(kanji.level)}<a href="#/level/${kanji.level}#lesson-${kanji.lesson}">Lesson ${kanji.lesson}</a><span>${plural(kanji.strokes, 'stroke')}</span>${radicalLine(kanji)}</div>`;
 }
 
 // The full study sheet for one kanji, used by Quick review, lessons and flashcards.
