@@ -52,6 +52,7 @@ MAX_WORD_LENGTH = 4
 CANDIDATES_PER_READING = 15
 CANDIDATE_GLOSS_LENGTH = 45
 MAX_STORY_LENGTH = 220
+MAX_SOUND_READINGS = 2
 
 # Readings missing from KANJIDIC that common words need for alignment (日本 = に + ほん).
 EXTRA_READINGS = {"日": ["に"]}

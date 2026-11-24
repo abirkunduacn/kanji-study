@@ -82,7 +82,9 @@ export function partsFormula(char, data) {
   const parts = kanji.parts.map((part) => {
     const target = data.isStudy(part.c) ? `#/kanji/${encodeURIComponent(part.c)}` : `#/family/${encodeURIComponent(part.base || part.c)}`;
     const base = part.base && part.base !== part.c ? `<span class="part-base">from <span lang="ja">${esc(part.base)}</span></span>` : '';
-    const sound = part.sound ? '<span class="part-sound">sound hint</span>' : '';
+    const sound = part.sound
+      ? `<span class="part-sound">sound hint${part.sr ? ` <span class="part-sound-reading" lang="ja">${esc(part.sr)}</span>` : ''}</span>`
+      : '';
     return `<a class="part" href="${target}"><span class="part-char" lang="ja">${esc(part.c)}</span><span class="part-meaning">${esc(part.m || 'shape')}</span>${base}${sound}</a>`;
   }).join('<span class="plus" aria-hidden="true">+</span>');
   return `<div class="formula">${parts}<span class="equals" aria-hidden="true">=</span><span class="part part--result"><span class="part-char" lang="ja">${esc(char)}</span><span class="part-meaning">${esc(kanji.meanings[0])}</span></span></div>`;

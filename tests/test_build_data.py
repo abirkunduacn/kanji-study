@@ -205,6 +205,16 @@ class TestBuildData(unittest.TestCase):
         self.assertEqual(bd.clean_meanings(["one", "one radical (no.1)"]), ["one"])
         self.assertEqual(bd.clean_meanings(["kettle lid radical (no. 8)"]), ["kettle lid radical (no. 8)"])
 
+    def test_BLD011_sound_parts_carry_their_reading(self):
+        """A sound part gets its on'yomi in hiragana; other parts and unknown characters get none."""
+        kanji_data = {"青": {"readings_on": ["せい", "しょう", "じょう"]}, "日": {"readings_on": ["にち"]}}
+        parts = [{"c": "日", "orig": None, "phon": False}, {"c": "青", "orig": None, "phon": True}, {"c": "龶", "orig": None, "phon": True}]
+        described = bd.describe_parts(parts, {}, {}, kanji_data)
+        self.assertNotIn("sr", described[0])
+        self.assertEqual(described[1]["sr"], "せい・しょう")
+        self.assertTrue(described[2]["sound"])
+        self.assertNotIn("sr", described[2])
+
     def test_BLD009_productivity_counts_containing_words(self):
         """A word contained in longer words scores higher."""
         counts = bd.productivity(["大学", "大学生", "大学院", "学生"])

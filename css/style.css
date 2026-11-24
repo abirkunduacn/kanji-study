@@ -360,6 +360,7 @@ a.part:hover { border-style: solid; border-color: var(--board); color: var(--ink
 .part-char { font-size: 1.35rem; line-height: 1.2; }
 .part-base, .part-sound { color: var(--ink-3); font-size: 0.78rem; }
 .part-sound { color: var(--board); }
+.part-sound-reading { font-size: 0.95rem; font-weight: 600; background: var(--marker); color: var(--marker-ink); padding: 0 0.15em; border-radius: 2px; }
 .part--result { border-style: solid; border-color: var(--board); }
 .plus, .equals { color: var(--ink-3); font-weight: 700; }
 

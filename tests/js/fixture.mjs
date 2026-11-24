@@ -32,7 +32,7 @@ export function fixtureRaw() {
       林: kanji('N5', 2, ['grove'], [{ c: '木', m: 'tree' }],
         [{ r: 'りん', words: [] }],
         [{ r: 'はやし', okuri: [], words: [word('林', 'はやし', 'grove', [0, 3])] }]),
-      森: kanji('N4', 1, ['forest'], [{ c: '木', m: 'tree' }, { c: '林', m: 'grove' }],
+      森: kanji('N4', 1, ['forest'], [{ c: '木', m: 'tree' }, { c: '林', m: 'grove', sound: true, sr: 'りん' }],
         [{ r: 'しん', words: [word('森林', 'しんりん', 'forest', [0, 2])] }],
         [{ r: 'もり', okuri: [], words: [word('森', 'もり', 'forest', [0, 2])] }]),
     },

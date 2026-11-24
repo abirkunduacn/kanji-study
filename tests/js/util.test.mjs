@@ -60,6 +60,12 @@ describe('Rendering', () => {
     assert.ok(kanjiSheet('休', data, { hidden: true }).includes('class="reveal"'));
   });
 
+  test('RND005 a sound hint shows the sound part’s own reading', () => {
+    const html = kanjiSheet('森', data);
+    assert.ok(html.includes('sound hint <span class="part-sound-reading" lang="ja">りん</span>'));
+    assert.ok(!kanjiSheet('休', data).includes('sound hint'));
+  });
+
   test('RND004 readings without common words are listed as less common, for on and kun alike', () => {
     const people = kanjiSheet('人', data);
     assert.ok(people.includes('Less common: <span lang="ja">にん</span>'));

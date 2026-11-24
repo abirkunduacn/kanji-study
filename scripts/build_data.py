@@ -258,7 +258,17 @@ def part_meaning(char, original, study_meanings, kanjidic):
     return ""
 
 
-def describe_parts(parts, study_meanings, kanjidic):
+def sound_reading(part, kanji_data):
+    """On'yomi of a sound part in hiragana (e.g. 青 -> せい), so it can be compared with the kanji's reading."""
+    for candidate in (part["c"], part["orig"]):
+        readings = (kanji_data.get(candidate) or {}).get("readings_on") if candidate else None
+        if readings:
+            clean = list(dict.fromkeys(kata_to_hira(r.replace("-", "")) for r in readings))
+            return "・".join(clean[:cfg.MAX_SOUND_READINGS])
+    return None
+
+
+def describe_parts(parts, study_meanings, kanjidic, kanji_data=None):
     described = []
     for part in parts:
         item = {"c": part["c"], "m": part_meaning(part["c"], part["orig"], study_meanings, kanjidic)}
@@ -266,6 +276,9 @@ def describe_parts(parts, study_meanings, kanjidic):
             item["base"] = part["orig"]
         if part["phon"]:
             item["sound"] = True
+            reading = sound_reading(part, kanji_data or {})
+            if reading:
+                item["sr"] = reading
         described.append(item)
     return described
 
@@ -356,7 +369,7 @@ def assemble(kanji_data, study, kanjidic, kvg, words, curated):
                     "strokes": entry.get("strokes"),
                     "meanings": (kanjidic.get(char, {}).get("meanings") or [m.lower() for m in entry["meanings"]])[:cfg.MAX_MEANINGS],
                     "radical": describe_radical(char, kanjidic, radical_forms),
-                    "parts": describe_parts(parts_by_kanji.get(char, []), study_meanings, kanjidic),
+                    "parts": describe_parts(parts_by_kanji.get(char, []), study_meanings, kanjidic, kanji_data),
                     "on": on,
                     "kun": kun,
                 }
