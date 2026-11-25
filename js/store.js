@@ -1,4 +1,4 @@
-import { MAX_STAGE, STORAGE_KEY, STORE_VERSION } from './config.js';
+import { MAX_STAGE, RESCUE_SUFFIX, STORAGE_KEY, STORE_VERSION } from './config.js';
 import { dayKey, log } from './util.js';
 
 export function emptyState() {
@@ -7,6 +7,10 @@ export function emptyState() {
 
 export function userKey(uid) {
   return `${STORAGE_KEY}:${uid}`;
+}
+
+export function rescueKey(key) {
+  return `${key}${RESCUE_SUFFIX}`;
 }
 
 const isObject = (value) => value !== null && typeof value === 'object' && !Array.isArray(value);
@@ -107,14 +111,40 @@ export function createStore(storage = defaultStorage(), initialKey = STORAGE_KEY
   let state = load(key);
   const listeners = new Set();
 
-  function load(fromKey) {
+  function read(fromKey) {
     try {
-      const raw = storage?.getItem(fromKey);
-      if (raw) return normalizeState(JSON.parse(raw));
+      return storage?.getItem(fromKey) ?? null;
+    } catch (error) {
+      log('store.read-failed', error.message);
+      return null;
+    }
+  }
+
+  // Keep the saved text exactly as it was, so a version that cannot read it never destroys it.
+  function keepRescue(fromKey, raw, reason) {
+    try {
+      const kept = storage.getItem(rescueKey(fromKey)) === null;
+      if (kept) storage.setItem(rescueKey(fromKey), raw);
+      log('store.rescue', { key: fromKey, reason, kept });
+    } catch (error) {
+      log('store.rescue-failed', error.message);
+    }
+  }
+
+  function load(fromKey) {
+    const raw = read(fromKey);
+    if (!raw) return emptyState();
+    try {
+      const parsed = JSON.parse(raw);
+      const loaded = normalizeState(parsed);
+      const unread = Object.keys(parsed.cards).length - Object.keys(loaded.cards).length;
+      if (unread > 0) keepRescue(fromKey, raw, `${unread} kanji could not be read`);
+      return loaded;
     } catch (error) {
       log('store.load-failed', error.message);
+      keepRescue(fromKey, raw, error.message);
+      return emptyState();
     }
-    return emptyState();
   }
 
   function save(action, details, { touch = true } = {}) {
@@ -146,6 +176,15 @@ export function createStore(storage = defaultStorage(), initialKey = STORAGE_KEY
     note: (char) => state.notes[char] || '',
     setting: (name, fallback) => state.settings[name] ?? fallback,
     snapshot: () => normalizeState(JSON.parse(JSON.stringify(state))),
+    rescue: () => read(rescueKey(key)),
+    clearRescue() {
+      try {
+        storage?.removeItem(rescueKey(key));
+      } catch (error) {
+        log('store.rescue-clear-failed', error.message);
+      }
+      log('store.rescue-cleared', { key });
+    },
     subscribe(listener) {
       listeners.add(listener);
       return () => listeners.delete(listener);

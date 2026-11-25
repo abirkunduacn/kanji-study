@@ -6,14 +6,33 @@ export function applyTheme(theme) {
   else delete document.documentElement.dataset.theme;
 }
 
+function downloadText(text, filename) {
+  const blob = new Blob([text], { type: 'application/json' });
+  const link = document.createElement('a');
+  link.href = URL.createObjectURL(blob);
+  link.download = filename;
+  link.click();
+  setTimeout(() => URL.revokeObjectURL(link.href), 1000);
+}
+
 export function render(ctx) {
   const { data, store, root } = ctx;
   const theme = store.setting('theme', 'auto');
   const cardCount = Object.keys(store.state.cards).length;
   const lastExport = store.setting('lastExport', null);
+  const rescue = store.rescue();
 
   root.innerHTML = `<div class="settings">
     <header class="page-head"><h1>Settings and backup</h1></header>
+
+    ${rescue ? `<section class="panel panel--rescue">
+      <h2>Progress kept from an update</h2>
+      <p>Some progress saved on this device could not be read after an update, so an untouched copy was kept. Download it, then use “Restore from file” once the site has been fixed.</p>
+      <div class="actions">
+        <button class="button button--primary" data-action="rescue-download">Download the kept copy</button>
+        <button class="button button--quiet" data-action="rescue-delete">Delete the kept copy</button>
+      </div>
+    </section>` : ''}
 
     <section class="panel">
       <h2>Back up your progress</h2>
@@ -82,12 +101,18 @@ export function render(ctx) {
   root.querySelector('[data-action="export"]').addEventListener('click', () => {
     const now = ctx.now();
     store.setSetting('lastExport', now);
-    const blob = new Blob([store.exportText()], { type: 'application/json' });
-    const link = document.createElement('a');
-    link.href = URL.createObjectURL(blob);
-    link.download = `${BACKUP_FILE_PREFIX}-${dayKey(now)}.json`;
-    link.click();
-    setTimeout(() => URL.revokeObjectURL(link.href), 1000);
+    downloadText(store.exportText(), `${BACKUP_FILE_PREFIX}-${dayKey(now)}.json`);
+    render(ctx);
+  });
+
+  root.querySelector('[data-action="rescue-download"]')?.addEventListener('click', () => {
+    downloadText(rescue, `${BACKUP_FILE_PREFIX}-kept-${dayKey(ctx.now())}.json`);
+    log('store.rescue-download', { length: rescue.length });
+  });
+
+  root.querySelector('[data-action="rescue-delete"]')?.addEventListener('click', () => {
+    if (!window.confirm('Delete the kept copy? Download it first if you might want that progress back.')) return;
+    store.clearRescue();
     render(ctx);
   });
 

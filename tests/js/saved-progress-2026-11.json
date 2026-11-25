@@ -1,0 +1,21 @@
+{
+  "version": 1,
+  "cards": {
+    "日": { "stage": 8, "due": 1805800000000, "reviews": 9, "lapses": 1, "added": 1790000000000, "last": 1795400000000 },
+    "人": { "stage": 5, "due": 1796700000000, "reviews": 4, "lapses": 0, "added": 1793000000000, "last": 1795300000000 },
+    "森": { "stage": 3, "due": 1795700000000, "reviews": 2, "lapses": 1, "added": 1795000000000, "last": 1795440000000 },
+    "休": { "stage": 1, "due": 1795492800000, "reviews": 0, "lapses": 0, "added": 1795478400000 },
+    "本": { "stage": 5, "due": 1797000000000, "reviews": 0, "lapses": 0, "added": 1795478400000 },
+    "丼": { "stage": 2, "due": 1795560000000, "reviews": 1, "lapses": 0, "added": 1795400000000, "last": 1795470000000 }
+  },
+  "notes": { "休": "a person leaning on a tree: やすむ" },
+  "answers": { "日": { "right": 5, "wrong": 1 }, "休": { "right": 1, "wrong": 0 } },
+  "days": {
+    "2026-11-23": { "reviews": 12, "correct": 10, "learned": 10 },
+    "2026-11-24": { "reviews": 3, "correct": 3, "learned": 0 }
+  },
+  "settings": { "theme": "dark", "lastExport": 1795450000000 },
+  "removed": { "木": 1795420000000 },
+  "updated": 1795480000000,
+  "resetAt": 0
+}

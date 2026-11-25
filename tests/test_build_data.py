@@ -16,6 +16,7 @@ import check_curation  # noqa: E402
 import kana  # noqa: E402
 import make_icons  # noqa: E402
 import radicals  # noqa: E402
+import serve  # noqa: E402
 
 LOG_DIR = ROOT / "tests" / "logs"
 
@@ -249,6 +250,13 @@ class TestIcons(unittest.TestCase):
     def test_ICO002_svg_draws_every_stroke(self):
         """The SVG icon has one polyline per stroke."""
         self.assertEqual(make_icons.svg_icon().count("<polyline"), len(make_icons.STROKES))
+
+
+class TestServe(unittest.TestCase):
+    def test_SRV001_port_argument(self):
+        """The preview server uses the port given on the command line, or 8000 without one."""
+        self.assertEqual(serve.port_from(["8010"]), 8010)
+        self.assertEqual(serve.port_from([]), serve.PORT)
 
 
 class _Tee(io.TextIOBase):

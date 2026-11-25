@@ -203,6 +203,7 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .actions { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.75rem; }
 .actions--split { justify-content: space-between; }
 .panel { padding: 1.25rem 0; border-top: 1px solid var(--grid); }
+.panel--rescue { padding: 1rem; margin-bottom: 1.25rem; background: var(--sheet); border: 1.5px solid var(--red); border-radius: var(--radius); }
 .section-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 0.5rem 1rem; margin-bottom: 0.75rem; }
 .section-head h2 { margin: 0; }
 
@@ -466,17 +467,17 @@ a.part:hover { border-style: solid; border-color: var(--board); color: var(--ink
 }
 .choices--kanji .key { position: absolute; left: 0.6rem; top: 0.6rem; }
 .choice[disabled] { cursor: default; }
-.choice.is-answer { border-color: var(--red); }
+.choice.is-answer { border-color: var(--board); background: var(--board-soft); }
 .choice.is-wrong .choice-label { text-decoration: line-through; text-decoration-color: var(--red); text-decoration-thickness: 2px; color: var(--ink-3); }
 .maru { position: absolute; inset: -6px -10px; width: calc(100% + 20px); height: calc(100% + 12px); pointer-events: none; overflow: visible; }
-.maru path { fill: none; stroke: var(--red); stroke-width: 2.5; stroke-linecap: round; stroke-dasharray: 340; stroke-dashoffset: 340; animation: draw-maru 380ms ease-out forwards; vector-effect: non-scaling-stroke; }
+.maru path { fill: none; stroke: var(--board); stroke-width: 2.5; stroke-linecap: round; stroke-dasharray: 340; stroke-dashoffset: 340; animation: draw-maru 380ms ease-out forwards; vector-effect: non-scaling-stroke; }
 @keyframes draw-maru { to { stroke-dashoffset: 0; } }
 .feedback { width: 100%; min-height: 1rem; margin-top: 1rem; text-align: left; }
 .feedback .next { width: 100%; scroll-margin-bottom: calc(5.5rem + env(safe-area-inset-bottom)); }
 @media (min-width: 560px) { .feedback .next { width: auto; } }
 .feedback:empty { display: none; }
 .verdict { font-weight: 700; }
-.verdict--right { color: var(--red); }
+.verdict--right { color: var(--board); }
 .verdict--wrong { color: var(--ink); }
 .explain { padding: 0.75rem 1rem; background: var(--sheet); border: 1.5px solid var(--grid); border-radius: var(--radius); margin-bottom: 0.75rem; }
 .explain p { margin: 0.2rem 0; }

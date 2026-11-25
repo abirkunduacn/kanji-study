@@ -17,7 +17,8 @@ function todayPanel(ctx) {
   const { data, store } = ctx;
   const now = ctx.now();
   const cards = store.state.cards;
-  const due = dueChars(cards, now);
+  // Cards for kanji a data update dropped stay saved (they come back if the kanji returns) but are not shown.
+  const due = dueChars(cards, now).filter((char) => data.isStudy(char));
   const lesson = nextLesson(data, store);
   const upcoming = nextDue(cards, now);
 

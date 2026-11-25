@@ -74,7 +74,7 @@ async function boot() {
   }
 
   function refreshBadge() {
-    const count = dueChars(store.state.cards, Date.now()).length;
+    const count = dueChars(store.state.cards, Date.now()).filter((char) => data.isStudy(char)).length;
     document.querySelectorAll('[data-due-count]').forEach((badge) => {
       badge.textContent = count;
       badge.hidden = count === 0;

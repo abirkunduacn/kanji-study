@@ -1,5 +1,5 @@
 export const APP_NAME = 'Kanji Study';
-export const APP_VERSION = '2026.11.24-4';
+export const APP_VERSION = '2026.11.25-1';
 export const DATA_URL = 'data/kanji.json';
 export const SERVICE_WORKER_URL = 'sw.js';
 export const LEVELS = ['N5', 'N4', 'N3', 'N2'];
@@ -8,6 +8,8 @@ export const LOG_PREFIX = '[kanji-study]';
 export const STORAGE_KEY = 'kanjiStudy.v1';
 export const ACTIVE_USER_KEY = 'kanjiStudy.activeUser';
 export const STORE_VERSION = 1;
+// Saved progress an update could not read is kept untouched under its key plus this suffix.
+export const RESCUE_SUFFIX = '.rescue';
 export const BACKUP_FILE_PREFIX = 'kanji-study-progress';
 
 // Cloud accounts (Firebase). The project's own values live in firebase-config.js.
